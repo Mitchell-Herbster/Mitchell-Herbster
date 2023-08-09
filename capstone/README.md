@@ -1,132 +1,252 @@
-## Module 1 Capstone - Vending Machine Software
+# Module 2 Capstone - TEnmo
 
-You're developing an application for the newest vending machine distributor,
-Umbrella Corp. They've released a new vending machine, Vendo-Matic 800, that's integrated
-with everyone's bank accounts, allowing customers to purchase products from their computers for their convenience.
+Congratulations—you've landed a job with TEnmo, whose product is an online payment service for transferring "TE bucks" between friends. However, they don't have a product yet. You've been tasked with writing a RESTful API server and command-line application.
 
-### Application requirements
+## Use cases
 
-1. The vending machine dispenses beverages, candy, chips, and gum.
-   - Each vending machine item has a Name and a Price.
-2. A main menu must display when the software runs, presenting the following options:
-    > ```
-    > (1) Display Vending Machine Items
-    > (2) Purchase
-    > (3) Exit
-    > ```
-3. The vending machine reads its inventory from an input file when the vending machine
-starts.
-4. The vending machine is automatically restocked each time the application runs.
-5. When the customer selects "(1) Display Vending Machine Items", they're presented
-with a list of all items in the vending machine with its quantity remaining:
-    - Each vending machine product has a slot identifier and a purchase price.
-    - Each slot in the vending machine has enough room for 5 of that product.
-    - Every product is initially stocked to the maximum amount.
-    - A product that has run out must indicate that it's SOLD OUT.
-6. When the customer selects "(2) Purchase", they're guided through the purchasing
-process menu:
-    ```
-    Current Money Provided: $2.00
-    
-    (1) Feed Money
-    (2) Select Product
-    (3) Finish Transaction
-    
-    ```
-7. The purchase process flow is as follows:
-    1. Selecting "(1) Feed Money" allows the customer to repeatedly feed money into the
-    machine in whole dollar amounts.
-        - The "Current Money Provided" indicates how much money the customer
-        has fed into the machine.
-    2. Selecting "(2) Select Product" allows the customer to select a product to
-    purchase.
-        - Show the list of products available and allow the customer to enter
-        a code to select an item.
-        - If the product code doesn't exist, the vending machine informs the customer and returns them
-        to the Purchase menu.
-        - If a product is currently sold out, the vending machine informs the customer and returns them to the
-        Purchase menu.
-        - If a customer selects a valid product, it's dispensed to the customer.
-        - Dispensing an item prints the item name, cost, and the money
-        remaining. Dispensing also returns a message:
-          - All chip items print "Crunch Crunch, Yum!"
-          - All candy items print "Munch Munch, Yum!"
-          - All drink items print "Glug Glug, Yum!"
-          - All gum items print "Chew Chew, Yum!"
-        - After the machine dispenses the product, the machine must update its balance
-        accordingly and return the customer to the Purchase menu.
-    3. Selecting "(3) Finish Transaction" allows the customer to complete the
-    transaction and receive any remaining change.
-        - The machine returns the customer's money using nickels, dimes, and quarters
-        (using the smallest amount of coins possible).
-        - The machine's current balance updates to $0 remaining.
-    4. After completing their purchase, the user returns to the "Main" menu to
-    continue using the vending machine.
-8. The vending machine logs all transactions to prevent theft from the vending machine.
-   - Each purchase must generate a line in a file called `Log.txt`.
-   - The lines must follow the format shown in the following example.
-       - The first dollar amount is the amount deposited, spent, or given as change.
-       - The second dollar amount is the new balance.
-        ```
-        01/01/2019 12:00:00 PM FEED MONEY: $5.00 $5.00 
-        01/01/2019 12:00:15 PM FEED MONEY: $5.00 $10.00 
-        01/01/2019 12:00:20 PM Crunchie B4 $1.75 $8.25 
-        01/01/2019 12:01:25 PM Cowtales B2 $1.50 $6.75 
-        01/01/2019 12:01:35 PM GIVE CHANGE: $6.75 $0.00
-        ```
-9. Create as many of your classes as possible to be "testable" classes. Limit console
-input and output to as few classes as possible.
-10. Optional - Sales Report
-    - Provide a "Hidden" menu option on the main menu ("4") that writes to a sales
-    report that shows the total sales since the machine started. The name of the
-    file must include the date and time so each sales report is uniquely named.
-    - An example of the output format appears at the end of this file.
-11. Provide unit tests demonstrating that your code works correctly.
-___
-### Vending machine data file
-The input file that stocks the vending machine products is a pipe `|` delimited file. Each line is a separate product in the file and follows this format:
+### Required use cases
 
-| Column Name   | Description |
-----------------|-------------|
-| Slot Location | The slot location in the vending machine containing the product.   |
-| Product Name  | The display name of the vending machine product.                   |
-| Price         | The purchase price for the product.                                |
-| Type          | The product type for this row.                                     |
+You should attempt to complete all of the following required use cases.
 
-For example:
+1. **[COMPLETE]** As a user of the system, I need to be able to register myself with a username and password.
+   1. A new registered user starts with an initial balance of 1,000 TE Bucks.
+   2. The ability to register has been provided in your starter code.
+2. **[COMPLETE]** As a user of the system, I need to be able to log in using my registered username and password.
+   1. Logging in returns an Authentication Token. I need to include this token with all my subsequent interactions with the system outside of registering and logging in.
+   2. The ability to log in has been provided in your starter code.
+3. As an authenticated user of the system, I need to be able to see my Account Balance.
+4. As an authenticated user of the system, I need to be able to *send* a transfer of a specific amount of TE Bucks to a registered user.
+   1. I should be able to choose from a list of users to send TE Bucks to.
+   2. I must not be allowed to send money to myself.
+   3. A transfer includes the User IDs of the from and to users and the amount of TE Bucks.
+   4. The receiver's account balance is increased by the amount of the transfer.
+   5. The sender's account balance is decreased by the amount of the transfer.
+   6. I can't send more TE Bucks than I have in my account.
+   7. I can't send a zero or negative amount.
+   8. A Sending Transfer has an initial status of *Approved*.
+5. As an authenticated user of the system, I need to be able to see transfers I have sent or received.
+6. As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
 
+### Optional use cases
+
+If you complete all of the required use cases and are looking for additional challenge, complete as many of the following optional use cases as you can.
+
+7. As an authenticated user of the system, I need to be able to *request* a transfer of a specific amount of TE Bucks from another registered user.
+   1. I should be able to choose from a list of users to request TE Bucks from.
+   2. I must not be allowed to request money from myself.
+   3. I can't request a zero or negative amount.
+   4. A transfer includes the User IDs of the from and to users and the amount of TE Bucks.
+   5. A Request Transfer has an initial status of *Pending*.
+   6. No account balance changes until the request is approved.
+   7. The transfer request should appear in both users' list of transfers (use case #5).
+8. As an authenticated user of the system, I need to be able to see my *Pending* transfers.
+9. As an authenticated user of the system, I need to be able to either approve or reject a Request Transfer.
+   1. I can't "approve" a given Request Transfer for more TE Bucks than I have in my account.
+   2. The Request Transfer status is *Approved* if I approve, or *Rejected* if I reject the request.
+   3. If the transfer is approved, the requester's account balance is increased by the amount of the request.
+   4. If the transfer is approved, the requestee's account balance is decreased by the amount of the request.
+   5. If the transfer is rejected, no account balance changes.
+
+## Sample screens
+
+### Use case 3: Current balance
 ```
-A1|Potato Crisps|3.05|Chip
-B1|Moonpie|1.80|Candy
-B2|Cowtales|1.50|Candy
-C1|Cola|1.25|Drink
+Your current account balance is: $9999.99
 ```
 
-**An input file is in your repository: `vendingmachine.csv`.**
+### Use case 4: Send TE Bucks
+```
+-------------------------------------------
+Users
+ID          Name
+-------------------------------------------
+313         Bernice
+54          Larry
+---------
 
- ---
-### Sales report
-The output sales report file is also pipe-delimited for consistency. Each line is a separate product with the number of sales for the applicable product. At the end of the report is a blank line followed by the **TOTAL SALES** dollar amount indicating the gross sales from the vending machine.
+Enter ID of user you are sending to (0 to cancel):
+Enter amount:
+```
 
-For example:
+### Use case 5: View transfers
+```
+-------------------------------------------
+Transfers
+ID          From/To                 Amount
+-------------------------------------------
+23          From: Bernice          $ 903.14
+79          To:    Larry           $  12.55
+---------
+Please enter transfer ID to view details (0 to cancel): "
+```
 
->```
->Potato Crisps|0
->Stackers|1
->Grain Waves|0
->Cloud Popcorn|0
->Moonpie|3
->Cowtales|0
->Wonka Bar|0
->Crunchie|0
->Cola|2
->Dr. Salt|0
->Mountain Melter|0
->Heavy|0
->U-Chews|0
->Little League Chew|1
->Chiclets|1
->Triplemint|0
->
->**TOTAL SALES** $11.05
->```
+### Use case 6: Transfer details
+```
+--------------------------------------------
+Transfer Details
+--------------------------------------------
+ Id: 23
+ From: Bernice
+ To: Me Myselfandi
+ Type: Send
+ Status: Approved
+ Amount: $903.14
+```
+
+### Use case 7: Requesting TE Bucks
+```
+-------------------------------------------
+Users
+ID          Name
+-------------------------------------------
+313         Bernice
+54          Larry
+---------
+
+Enter ID of user you are requesting from (0 to cancel):
+Enter amount:
+```
+
+### Use case 8: Pending requests
+```
+-------------------------------------------
+Pending Transfers
+ID          To                     Amount
+-------------------------------------------
+88          Bernice                $ 142.56
+147         Larry                  $  10.17
+---------
+Please enter transfer ID to approve/reject (0 to cancel): "
+```
+
+### Use case 9: Approve or reject pending transfer
+```
+1: Approve
+2: Reject
+0: Don't approve or reject
+---------
+Please choose an option:
+```
+
+## Database schema
+
+![Database schema](./img/Tenmo_erd.png)
+
+### `tenmo_user` table
+
+Stores the login information for users of the system.
+
+| Field           | Description                                                                    |
+|-----------------|--------------------------------------------------------------------------------|
+| `user_id`       | Unique identifier of the user                                                  |
+| `username`      | String that identifies the name of the user; used as part of the login process |
+| `password_hash` | Hashed version of the user's password                                          |
+| `role`          | Name of the user's role                                                        |
+
+### `account` table
+
+Stores the accounts of users in the system.
+
+| Field           | Description                                                        |
+| --------------- | ------------------------------------------------------------------ |
+| `account_id`    | Unique identifier of the account                                   |
+| `user_id`       | Foreign key to the `users` table; identifies user who owns account |
+| `balance`       | The amount of TE bucks currently in the account                    |
+
+### `transfer_type` table
+
+Stores the types of transfers that are possible.
+
+| Field                | Description                             |
+| -------------------- | --------------------------------------- |
+| `transfer_type_id`   | Unique identifier of the transfer type  |
+| `transfer_type_desc` | String description of the transfer type |
+
+There are two types of transfers:
+
+| `transfer_type_id` | `transfer_type_desc` | Purpose                                                                |
+| ------------------ | -------------------- | ---------------------------------------------------------------------- |
+| 1                  | Request              | Identifies transfer where a user requests money from another user      |
+| 2                  | Send                 | Identifies transfer where a user sends money to another user           |
+
+### `transfer_status` table
+
+Stores the statuses of transfers that are possible.
+
+| Field                  | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `transfer_status_id`   | Unique identifier of the transfer status  |
+| `transfer_status_desc` | String description of the transfer status |
+
+There are three statuses of transfers:
+
+| `transfer_status_id` | `transfer_status_desc` |Purpose                                                                                 |
+| -------------------- | -------------------- | ---------------------------------------------------------------------------------------  |
+| 1                    | Pending                | Identifies transfer that hasn't occurred yet and requires approval from the other user |
+| 2                    | Approved               | Identifies transfer that has been approved and occurred                                |
+| 3                    | Rejected               | Identifies transfer that wasn't approved                                               |
+
+### `transfer` table
+
+Stores the transfers of TE bucks.
+
+| Field                | Description                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------- |
+| `transfer_id`        | Unique identifier of the transfer                                                               |
+| `transfer_type_id`   | Foreign key to the `transfer_types` table; identifies type of transfer                          |
+| `transfer_status_id` | Foreign key to the `transfer_statuses` table; identifies status of transfer                     |
+| `account_from`       | Foreign key to the `accounts` table; identifies the account that the funds are being taken from |
+| `account_to`         | Foreign key to the `accounts` table; identifies the account that the funds are going to         |
+| `amount`             | Amount of the transfer                                                                          |
+
+> Note: there are two check constraints in the DDL that creates the `transfer` table. Be sure to take a look at `tenmo.sql` to understand these constraints.
+
+## How to set up the database
+
+Create a new Postgres database called `tenmo`. Run the `database/tenmo.sql` script in pgAdmin to set up the database.
+
+### Datasource
+
+A Datasource has been configured for you in `/src/resources/application.properties`. 
+
+```
+# datasource connection properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/tenmo
+spring.datasource.name=tenmo
+spring.datasource.username=postgres
+spring.datasource.password=postgres1
+```
+
+### JdbcTemplate
+
+If you look in `/src/main/java/com/techelevator/dao`, you'll see `JdbcUserDao`. This is an example of how to get an instance of `JdbcTemplate` in your DAOs. If you declare a field of type `JdbcTemplate` and add it as an argument to the constructor, Spring automatically injects an instance for you:
+
+```java
+@Service
+public class JdbcUserDao implements UserDao {
+
+    private JdbcTemplate jdbcTemplate;
+
+    public JdbcUserDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+}
+```
+
+## Testing
+
+
+### DAO integration tests
+
+`com.techelevator.dao.BaseDaoTests` has been provided for you to use as a base class for any DAO integration test. It initializes a Datasource for testing and manages rollback of database changes between tests.
+
+`com.techelevator.dao.JdbUserDaoTests` has been provided for you as an example for writing your own DAO integration tests.
+
+Remember that when testing, you're using a copy of the real database. The schema and data for the test database are defined in `/src/test/resources/test-data.sql`. The schema in this file matches the schema defined in `database/tenmo.sql`.
+
+
+## Authentication
+
+The user registration and authentication functionality for the system has already been implemented. If you review the login code, you'll notice that after successful authentication, an instance of `AuthenticatedUser` is stored in the `currentUser` member variable of `App`. The user's authorization token—meaning JWT—can be accessed from `App` as `currentUser.getToken()`.
+
+When the use cases refer to an "authenticated user", this means a request that includes the token as a header. You can also reference other information about the current user by using the `User` object retrieved from `currentUser.getUser()`.
